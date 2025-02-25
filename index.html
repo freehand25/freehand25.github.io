@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html class=" w-mod-ix" xmlns="http://www.w3.org/1999/html"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><style>.wf-force-outline-none[tabindex="-1"]:focus{outline:none;}</style>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YMTSZM1Z57"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YMTSZM1Z57');
+    </script>
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Mobius: Text to Seamless Looping Video Generation via Latent Shift</title>
+    <link rel="stylesheet" href="images/css+style/bootstrap.min.css">
+    <link href="images/css+style/css.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="images/css+style/Highlight-Clean.css">
+    <link rel="stylesheet" href="images/css+style/styles.css">
+
+<!--    <link rel="manifest" href=css+style/site.webmanifest">-->
+
+    <meta name="description" content="Mobius: Text to Seamless Looping Video Generation via Latent Shift, 2025.">
+    <meta property="og:url" content="https://Mobius.github.io">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mobius: Text to Seamless Looping Video Generation via Latent Shift">
+    <meta property="og:description" content="Mobius: Text to Seamless Looping Video Generation via Latent Shift, 2025.">
+<!--    <meta property="og:image" content="https://Mobius.github.io/images/mainpage/thumbnail.jpg">-->
+
+        <!-- Bootstrap CSS -->
+<!--    <link href="images/bootstrap.min.css" rel="stylesheet">-->
+
+    <!-- Bootstrap Bundle with Popper -->
+<!--    <script src="images/bootstrap.bundle.min.js"></script>-->
+<!--    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">-->
+
+<!--    &lt;!&ndash; Bootstrap Bundle with Popper &ndash;&gt;-->
+<!--    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>-->
+
+<!--    &lt;!&ndash; Twitter Meta Tags &ndash;&gt;-->
+<!--    <meta name="twitter:card" content="summary_large_image">-->
+<!--    <meta property="twitter:domain" content="github.io">-->
+<!--    <meta property="twitter:url" content="https://customdiffusion360.github.io">-->
+<!--    <meta name="twitter:title" content="Customizing Text-to-Image Diffusion with Object Viewpoint Control">-->
+<!--    <meta name="twitter:description" content="Customizing Text-to-Image Diffusion with Object Viewpoint Control, 2023.">-->
+<!--    <meta name="twitter:image" content="https://customdiffusion360.github.io/images/mainpage/thumbnail.jpg">-->
+
+
+    <script src="images/css+style/video_comparison.js"></script>
+    <script type="module" src="images/css+style/model-viewer.min.js"></script>
+    <style>
+        strong {
+          font-weight: bold;
+        }
+    </style>
+
+    <style>
+        .video-container {
+            position: relative;
+            display: inline-block;
+            width: 384px; /* 根据视频的实际宽度调整 */
+            height: 256px; /* 根据视频的实际高度调整 */
+            /*border: 2px solid red; !* 调试用边框 *!*/
+            margin: 0; /* 移除默认边距 */
+            padding: 0; /* 移除默认填充 */
+            box-sizing: border-box; /* 确保宽度和高度包括边框和填充 */
+        }
+
+        .video-container2 {
+            position: relative;
+            display: inline-block;
+            /*width: 100%;*/
+            /*padding-top: 66.66%; !* 16:9 的纵横比 *!*/
+            width: 240px; /* 根据视频的实际宽度调整 */
+            height: 160px; /* 根据视频的实际高度调整 */
+            /*border: 2px solid red; !* 调试用边框 *!*/
+            margin: 0; /* 移除默认边距 */
+            padding: 0; /* 移除默认填充 */
+            box-sizing: border-box; /* 确保宽度和高度包括边框和填充 */
+        }
+
+        .video-container2 .video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 确保视频覆盖整个容器 */
+            border: none; /* 移除默认边框 */
+            padding: 0; /* 移除默认内边距 */
+            margin: 0; /* 移除默认外边距 */
+            box-sizing: border-box; /* 确保宽度和高度包括边框和填充 */
+        }
+
+        .video-container .video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 确保视频覆盖整个容器 */
+            border: none; /* 移除默认边框 */
+            padding: 0; /* 移除默认内边距 */
+            margin: 0; /* 移除默认外边距 */
+            box-sizing: border-box; /* 确保宽度和高度包括边框和填充 */
+        }
+
+        .frame-number {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 30px;  /* 设置宽度 */
+            height: 30px; /* 设置高度与宽度相同 */
+            display: flex; /* 使用 flexbox 布局 */
+            align-items: center; /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+        }
+
+
+        /*.collapse-content {*/
+        /*    display: none;*/
+        /*    margin-top: 10px;*/
+        /*}*/
+
+        /*.triangle-button[aria-expanded="true"] + .collapse-content {*/
+        /*    display: block;*/
+        /*}*/
+
+        /*.triangle-button {*/
+        /*    background: none;*/
+        /*    border: none;*/
+        /*    cursor: pointer;*/
+        /*    outline: none;*/
+        /*    padding: 0;*/
+        /*    margin-bottom: 10px;*/
+        /*}*/
+
+        /*.triangle-button .triangle {*/
+        /*    width: 0;*/
+        /*    height: 0;*/
+        /*    border-top: 10px solid transparent;*/
+        /*    border-bottom: 10px solid transparent;*/
+        /*    border-left: 15px solid #007bff; !* 三角形的颜色 *!*/
+        /*    display: inline-block;*/
+        /*    transition: transform 0.3s ease;*/
+        /*}*/
+
+        /*.triangle-button[aria-expanded="true"] .triangle {*/
+        /*    transform: rotate(90deg);*/
+        /*}*/
+
+        /*.triangle-button:focus {*/
+        /*    outline: none;*/
+        /*}*/
+
+        .auther_text {
+        text-decoration: none !important; /* 默认情况下移除下划线 */
+        }
+
+        .auther_text:hover {
+            text-decoration: underline !important; /* 鼠标悬停时显示下划线 */
+        }
+
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="highlight-clean d-flex flex-column align-items-center justify-content-center" style="padding-bottom: 20px;">
+        <div class="container text-center" style="padding-bottom: 10px; max-width: 1000px;">
+            <img src="images/icon/log.png" alt="Log Image" style="vertical-align: middle;">
+            <b style="font-size: 4em; vertical-align: middle; font-weight: bold; font-style: italic; font-family: 'Comic Sans MS', cursive">Mobius</b>
+            <h1 class="text-center">Text to Seamless Looping Video Generation via Latent Shift</h1>
+        </div>
+        <div class="container  d-flex flex-column align-items-center justify-content-center" style="max-width: 900px;">
+            <div class="row authors" style="padding-bottom: 20px;">
+                <h5 class="text-center" style="width: auto"><a class="text-center auther_text" href="https://bixiuli.github.io/">Xiuli Bi</a><sup>1</sup></h5>
+<!--                <h5 class="text-center" style="width: auto"><a class="text-center auther_text" >Jianfei Yuan</a><sup>1</sup></h5>-->
+                <h5 class="text-center" style="width: auto">Jianfei Yuan<sup>1</sup></h5>
+                <h5 class="text-center" style="width: auto"><a class="text-center auther_text" href="https://scholar.google.com/citations?user=fXlz210AAAAJ&hl=zh-CN">Bo Liu</a><sup>1</sup></h5>
+                <h5 class="text-center" style="width: auto"><a class="text-center auther_text" href="https://yzhang2016.github.io/">Yong Zhang</a><sup>2</sup></h5>
+                <h5 class="text-center" style="width: auto"><a class="text-center auther_text" href="https://vinthony.github.io/academic/">Xiaodong Cun</a><sup>3*</sup></h5>
+                <h5 class="text-center" style="width: auto"><a class="text-center auther_text" href="https://cmpun.github.io/">Chi-Man Pan</a><sup>4</sup></h5>
+                <h5 class="text-center" style="width: auto"><a class="text-center auther_text" href="https://scholar.google.com/citations?hl=zh-TW&user=e3Dw1bkAAAAJ">Bin Xiao</a><sup>1</sup></h5>
+
+<!--                <h5 class="text-center"><a class="text-center" href=" https://graceduansu.github.io">Grace Su</a><sup>1*</sup></h5>-->
+<!--                <h5 class="text-center"><a href="https://richzhang.github.io">Richard Zhang</a><sup>2</sup></h5>-->
+<!--                <h5 class="text-center"><a href="https://taesung.me">Taesung Park</a><sup>2</sup></h5>-->
+<!--                <h5 class="text-center"><a class="text-center" href="https://research.adobe.com/person/eli-shechtman/">Eli Shechtman</a><sup>2</sup></h5>-->
+<!--                <h5 class="text-center"><a class="text-center" href="https://www.cs.cmu.edu/~junyanz/">Jun-Yan Zhu</a><sup>1</sup></h5>-->
+
+            </div>
+            <div class="row authors institute">
+                <div class="col-sm-12">
+                    <h3 class="text-center"><sup>1</sup> Chongqing University of Post and Telecommunications
+                        &nbsp&nbsp <sup>2</sup> Meituan &nbsp&nbsp
+                        <br>
+                        <sup>3</sup> GVC Lab, Great Bay University &nbsp&nbsp <sup>4</sup> University of Macau
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="buttons" style="margin-bottom: 8px;">
+            <a class="btn btn-light" role="button" href="https://github.com/YisuiTT/Mobius">
+                <svg style="visibility:hidden;width:0px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 375 531">
+<!--                    <polygon stroke="#000000" points="0.5,0.866 459.5,265.87 0.5,530.874 "/>-->
+                    <img src="images/icon/code.svg" style="width:24px;height:24px;margin-left:-12px;margin-right:12px"/>
+                </svg>
+                Code
+            </a>
+            <a class="btn btn-light" role="button" href="Mobius.github.io">
+                <svg style="width:0px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 24 24">
+                    <img src="images/icon/paper.svg" style="width:24px;height:24px;margin-left:-12px;margin-right:12px"/>
+<!--                    <path fill="currentColor" d="M16 0H8C6.9 0 6 .9 6 2V18C6 19.1 6.9 20 8 20H20C21.1 20 22 19.1 22 18V6L16 0M20 18H8V2H15V7H20V18M4 4V22H20V24H4C2.9 24 2 23.1 2 22V4H4M10 10V12H18V10H10M10 14V16H15V14H10Z"></path>-->
+                </svg>
+                Paper
+            </a>
+            <a class="btn btn-light disabled border border-dark" aria-disabled="true" role="button" href="#">
+                <svg style="visibility:hidden;width:0px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 375 531">
+<!--                    <polygon stroke="#000000" points="0.5,0.866 459.5,265.87 0.5,530.874 "/>-->
+                    <img src="images/icon/project.svg" style="width:24px;height:24px;margin-left:-12px;margin-right:12px"/>
+                </svg>
+                Project
+            </a>
+            <a class="btn btn-light" role="button" href="#gallery">
+                <svg style="width:0px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 375 531">
+<!--                    <polygon stroke="#000000" points="0.5,0.866 459.5,265.87 0.5,530.874 "/>-->
+                    <img src="images/icon/gallery.svg" style="width:24px;height:24px;margin-left:-12px;margin-right:12px"/>
+                </svg>
+                Gallery
+            </a>
+<!--             <a class="btn btn-light" role="button" href="Mobius.github.io">-->
+<!--                <svg style="width:0px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 375 531">-->
+<!--                    <img src="images/icon/demo.svg" style="width:24px;height:24px;margin-left:-12px;margin-right:12px"/>-->
+<!--                </svg>-->
+<!--                Demo-->
+<!--            </a>-->
+        </div>
+    </div>
+
+
+    <div class="container" style="max-width: 1200px; ">
+        <div class="row teaser" >
+            <div class="col-md-12" >
+                <!-- Large format devices -->
+                <!-- row1 -->
+                <!-- row1 -->
+                <!-- row1 -->
+                <div class="row">
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/teaser/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/teaser/case_2.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/teaser/case_3.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p class="caption text-center">
+<!--                        <p>-->
+                        <i>
+                        A sleepy koala, nestled comfortably on a tree branch, lazily munches on eucalyptus leaves, its fluffy grey fur blending with the textured bark of the tree. The leaves sway slightly in the breeze as the koala picks them one by one, its black nose twitching with each bite.
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p class="caption text-center">
+<!--                        <p>-->
+                        <i>
+                        A woman stands behind a kitchen counter, expertly blending a mix of fresh fruits—bananas, strawberries, and spinach—into a vibrant smoothie. The blender whirs, and the colorful ingredients combine, creating a swirling blend of red and green hues...
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p class="caption text-center">
+<!--                        <p>-->
+                        <i>
+                        A young female activist stands tall, holding a flag high above her head with determination in her eyes. The flag flutters in the breeze, its bold colors contrasting with the backdrop of a city street or public space. Her posture is confident, embodying strength...
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <!--row2-->
+                <!--row2-->
+                <!--row2-->
+                 <div class="row">
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/teaser/case_4.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/teaser/case_5.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/teaser/case_6.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p class="caption text-center">
+<!--                        <p>-->
+                        <i>
+                        A woman in a flowing, white sundress and sunglasses, her hair tousled by the sea breeze, runs along a golden sandy beach as the late afternoon sun casts long shadows. The ocean's waves crash rhythmically...
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p class="caption text-center">
+<!--                        <p>-->
+                        <i>
+                        A rugged man in a sleek, insulated black ski jacket and matching ski pants glides effortlessly down a pristine, powdery white slope, his movements fluid and graceful. His goggles reflect the brilliant sunlight,...
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p class="caption text-center">
+<!--                        <p>-->
+                        <i>
+                        A hacker, surrounded by holographic screens, works feverishly in a dimly lit, tech-heavy room. The digital interference around them creates an intense atmosphere of high-tech rebellion in the cyberpunk world.
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+<!--                    <div class="video-container">-->
+<!--                        <video loop autoplay muted width="380px" height="300px" class="video">-->
+<!--                            <source src="images/teaser/case_6.mp4" type="video/mp4">-->
+<!--                        </video>-->
+<!--                        <span class="frame-number">0</span>-->
+<!--                    </div>-->
+
+                <p style="text-indent: 2em;">
+                    Without any training, the proposed Mobius can generate seamless looping videos using the pre-trained Text-to-Video latent diffusion model directly. Can you identify the end in the above video?
+                </p>
+                <p></p>
+                <h6 class="caption"></h6>
+            </div>
+        </div>
+    </div>
+
+<!--    <hr style="max-width: 1200px; margin: 0 auto;">-->
+<!--    <div class="container" style="max-width: 1200px;">-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-12">-->
+<!--                <button class="triangle-button" type="button" id="toggleAbstract" aria-expanded="false">-->
+<!--                    <span class="triangle"></span>-->
+<!--                </button>-->
+<!--                <center><h2>Abstract</h2></center>-->
+<!--                <div id="abstractCollapse" class="collapse-content">-->
+<!--                    <p>-->
+<!--                    We present Mobius, a novel method to generate seamlessly looping videos from text descriptions directly without any user annotations, thereby creating new visual materials for the multi-media presentation.-->
+<!--                    Our method repurposes the pre-trained video latent diffusion model for generating looping videos from text prompts without any training.-->
+<!--                    During inference, we first construct a latent cycle by connecting the starting and ending noise of the videos. Given that the temporal consistency can be maintained by the context of the video diffusion model, we perform multi-frame latent denoising by gradually shifting the first-frame latent to the end in each step. As a result, the denoising context varies in each step while maintaining consistency throughout the inference process.-->
+<!--                    Moreover, the latent cycle in our method can be of any length. This extends our latent-shifting approach to generate seamless looping videos beyond the scope of the video diffusion model's context.-->
+<!--                    Unlike previous cinemagraphs, the proposed method does not require an image as appearance, which will restrict the motions of the generated results. Instead, our method can produce more dynamic motion and better visual quality.-->
+<!--                    We conduct multiple experiments and comparisons to verify the effectiveness of the proposed method, demonstrating its efficacy in different scenarios.-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+    <!-- <hr class="divider"> -->
+    <hr style="max-width: 1200px;  margin: 0 auto;">
+    <div class="container" style="max-width: 1200px;">
+        <div class="row">
+            <div class="col-md-12">
+                <center><h2>Algorithm</h2></center>
+                <p style="text-indent: 2em;">
+                We present Mobius, a novel method to generate seamlessly looping videos from text descriptions directly without any user annotations, thereby creating new visual materials for the multi-media presentation.
+                Our method repurposes the pre-trained video latent diffusion model for generating looping videos from text prompts without any training.
+                During inference, we first construct a latent cycle by connecting the starting and ending noise of the videos. Given that the temporal consistency can be maintained by the context of the video diffusion model, we perform multi-frame latent denoising by gradually shifting the first-frame latent to the end in each step. As a result, the denoising context varies in each step while maintaining consistency throughout the inference process.
+                Taking <strong>4 latent toys</strong> pre-trained Video Diffusion Models(VDM) as an example, we build a latent cycle and shift the start point in each denoising step in inference for text-guided looping video generation. Notice that, the shifting is conducted in the latent space, we emit the latent encoder and decoder for easy understanding.
+                </p>
+                <p></p><p></p>
+                <div style="text-align: center;">
+                    <img src="images/algorithm/algorithm.jpg" style="width: 80%;"/>
+                  </div>
+                <p></p><p></p>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- <hr class="divider"> -->
+    <hr style="max-width: 1200px;  margin: 0 auto;">
+    <div class="container" style="max-width: 1200px;">
+        <div class="row">
+            <div class="col-md-12">
+                <center><h2>Comparison to Baselines</h2></center>
+                <p style="text-indent: 2em;">
+                    Our method is based on the pre-trained open-source latent video diffusion model, CogVideoX-5B. Since there is no previous work for open-domain looping video generation from a text description, we majorly compare two generative interpolation methods and one method from the community.
+                    Specifically, we comapre with <strong>Svd-Interp.</strong>, <strong>CogX-Interp.</strong>, <strong>Latent Mix</strong>, and dirct generation of <strong>CogvideoX</strong>.
+                </p>
+                <p></p><p></p>
+                <!--                row1-->
+                <!--                row1-->
+                <!--                row1-->
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 19%; text-align: center">
+                        <p><strong>CogVideoX</strong></p>
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/base/case_59.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 19%; text-align: center">
+                        <p><strong>Svd-Interp.</strong></p>
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/svd-interpolation/case_59.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 19%; text-align: center">
+                        <p><strong>CogX-Interp.</strong></p>
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/cog-interpolation/case_59.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 19%; text-align: center">
+                        <p><strong>Latent-Mix</strong></p>
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/latent-mix/case_59.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 19%; text-align: center">
+                        <p><strong>Ours</strong></p>
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/ours/case_59.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 100%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p style="text-indent: 2em;">
+<!--                        <p>-->
+                        <i>
+                        A rugged man in a sleek, insulated black ski jacket and matching ski pants glides effortlessly down a pristine, powdery white slope, his movements fluid and graceful. His goggles reflect the brilliant sunlight, and his breath forms visible puffs in the crisp mountain air. The backdrop is a breathtaking panorama of snow-capped peaks and towering pine trees, their branches lightly dusted with snow. As he navigates the slopes, his ski poles rhythmically punctuate the snow, leaving a trail of precise, parallel lines. The scene transitions to a close-up of his focused expression, the wind tousling his hair, capturing the exhilaration and freedom of the sport.
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <!--                row2-->
+                <!--                row2-->
+                <!--                row2-->
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 19%;">
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/base/case_55.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 19%;">
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/svd-interpolation/case_55.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 19%;">
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/cog-interpolation/case_55.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 19%;">
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/latent-mix/case_55.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 19%;">
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/ours/case_55.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 100%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p style="text-indent: 2em;">
+<!--                        <p>-->
+                        <i>
+                        A young female activist stands tall, holding a flag high above her head with determination in her eyes. The flag flutters in the breeze, its bold colors contrasting with the backdrop of a city street or public space. Her posture is confident, embodying strength and resolve as she becomes a symbol of the cause she represents. The surrounding environment captures the energy and passion of her movement.
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <!--                row3-->
+                <!--                row3-->
+                <!--                row3-->
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 19%;">
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/base/case_6.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 19%;">
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/svd-interpolation/case_6.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 19%;">
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/cog-interpolation/case_6.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 19%;">
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/latent-mix/case_6.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 19%;">
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/compare/ours/case_6.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 100%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p style="text-indent: 2em;">
+<!--                        <p>-->
+                        <i>
+                        A bicycle glides smoothly down a tree-lined lane, its wheels softly humming on the asphalt. The stationary camera captures the silhouette against the sun-dappled road. The scene loops as the bike exits the frame and re-enters on the other side.
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!--        <hr style="max-width: 1000px;">-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-12">-->
+<!--                <center><h2>Results</h2></center>-->
+<!--                More results are shown on the <a href="results.html">Gallery</a>.-->
+<!--                <p></p><p></p>-->
+<!--                <div id="singleconceptscroll" class="container" style="max-width: 1200px; ">-->
+<!--                <br>-->
+
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <hr style="max-width: 1000px;">-->
+
+    </div>
+
+    <hr style="max-width: 1200px;  margin: 0 auto;">
+    <div class="container" style="max-width: 1200px;">
+        <div class="row">
+            <div id="gallery" class="col-md-12">
+                <center><h2>Gallery</h2></center>
+                <p style="text-indent: 2em;">
+                    We demonstrated the generation of more looping videos in various styles.
+                </p>
+                <p></p><p></p>
+<!--                <div id="singleconceptscroll" class="containershadow" style="max-width: 1200px; max-height: 2048px;">-->
+
+
+                    <!-- START OF SINGLE CONCEPT -->
+
+
+<div class="row" style="margin-bottom: 0;">
+    <div class="column px-4" style="margin: auto;width: 100%;  margin-bottom: -10px;">
+    <p class="caption text-center" style="font-size: 20px;">
+        <strong>Animal</strong>
+    </p>
+    </div>
+</div>
+<div class="row">
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/animal/case_6.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/animal/case_15.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/animal/case_16.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+</div>
+<div class="row">
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+    <!--                        <p>-->
+            <i>
+            A lone wolf stands atop a snowy hill, howling beneath a starry sky in a frozen forest. The sound echoes through the trees, its call clear and haunting as the wolf's breath turns to mist in the cold air.
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+    <!--                        <p>-->
+            <i>
+            A majestic dragon soars through the sky, its massive wings outstretched against the fiery colors of a setting sun. The dragon’s scales gleam with each powerful stroke of its wings, while the sky...
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+            <i>
+            A cat stretches lazily in the warm sunlight streaming through an open window, its fur glowing in the golden light. The soft rays gently warm its body as it shifts position, settling back down with a contented purr.
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-bottom: 0;">
+    <div class="column px-4" style="margin: auto;width: 100%;  margin-bottom: -10px;">
+    <p class="caption text-center" style="font-size: 20px;">
+        <strong>Environment</strong>
+    </p>
+    </div>
+</div>
+<div class="row">
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/envirnment/case_30.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/envirnment/case_37.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/envirnment/case_47.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+</div>
+<div class="row">
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+    <!--                        <p>-->
+            <i>
+            Small raindrops create rhythmic ripples in a puddle, their concentric circles merging seamlessly. The camera shifts gently from a close-up angle to a wider view, revealing a deserted street. The loop restarts with the first raindrop hitting the surface.
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+    <!--                        <p>-->
+            <i>
+            White-capped waves roll forward and crash dramatically against jagged rocks, sending spray into the air. The camera pans gently along the shoreline, following the motion of the water. The loop resets as the wave retreats, ready to surge again.
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+            <i>
+            Stars twinkle in the vast expanse of space as a galaxy rotates slowly in the distance. The camera zooms closer through vibrant, glowing nebulae, emphasizing their brilliant colors. The loop restarts as the zoom reverses, returning to the distant view of the galaxy
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row" style="margin-bottom: 0;">
+    <div class="column px-4" style="margin: auto;width: 100%;  margin-bottom: -10px;">
+    <p class="caption text-center" style="font-size: 20px;">
+        <strong>Cartoon</strong>
+    </p>
+    </div>
+</div>
+<div class="row">
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/cartoon/case_82.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/cartoon/case_84.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/cartoon/case_85.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+</div>
+<div class="row">
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+    <!--                        <p>-->
+            <i>
+            A mischievous raccoon sneaks through a pile of cartoonish leaves in a city park. His wide-eyed expression and fluffy tail create a quirky and expressive scene,..
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+    <!--                        <p>-->
+            <i>
+            A group of adorable animals, including a talking squirrel, a rabbit in glasses, and a wise owl, gather around a campfire in the forest. Their animated,...
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+            <i>
+            A young wizard in a colorful purple robe waves a wand, creating sparkling cartoonish magic. The colors are bold, and the entire scene feels fantastical and full of wonder.
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" style="margin-bottom: 0;">
+    <div class="column px-4" style="margin: auto;width: 100%;  margin-bottom: -10px;">
+    <p class="caption text-center" style="font-size: 20px;">
+        <strong>Watercolor</strong>
+    </p>
+    </div>
+</div>
+<div class="row">
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/watercolor/case_16.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/watercolor/case_9.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/watercolor/case_20.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+</div>
+<div class="row">
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+    <!--                        <p>-->
+            <i>
+            A fox moves through the forest, its body sleek and agile as it glides over the ground. With each step, the watercolor brush captures the graceful movement of its paws on the soft forest floor, the colors of the trees and leaves blending in the background. The fox pauses, tilting its head to listen, before it leaps forward,...
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+    <!--                        <p>-->
+            <i>
+                A horse gallops through a golden wheat field, its mane and tail flowing in the wind. The watercolor brushstrokes capture the rhythm of its powerful strides, each movement blending seamlessly into the warm tones of the landscape. As it slows to a trot, dust rises in soft, pastel clouds before settling back into the earth.
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+            <i>
+            A child dances joyfully in an open field, her arms outstretched as she spins in circles.  The movement is light and carefree, her dress fluttering gently with each spin, the watercolor brushstrokes adding a sense of whimsy and lightness to her every motion. With each joyful leap, the scene changes,...
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-bottom: 0;">
+    <div class="column px-4" style="margin: auto;width: 100%;  margin-bottom: -10px;">
+    <p class="caption text-center" style="font-size: 20px;">
+        <strong>Cyberpunk</strong>
+    </p>
+    </div>
+</div>
+<div class="row">
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/cyberpunk/case_14.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/cyberpunk/case_27.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="video-container">
+                <video loop autoplay muted class="video">
+                    <source src="images/results/cyberpunk/case_19.mp4" type="video/mp4">
+                </video>
+                <span class="frame-number">0</span>
+            </div>
+        </div>
+        </div>
+</div>
+<div class="row">
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+    <!--                        <p>-->
+            <i>
+                A cyberpunk courier in a sleek, urban jumpsuit speeds through a glowing metropolis on a hoverbike, the neon underlights casting a pulsating pink glow onto the rain-slicked road.  The digital HUD on their helmet flickers with incoming messages as they navigate through narrow, hologram-filled alleyways at breakneck speed.
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+    <!--                        <p>-->
+            <i>
+                A woman with bright neon hair dances in the middle of a crowded street, her body moving to the rhythm of the city. With each movement, her neon attire flickers and pulses, casting light onto the pavement around her. She spins, and with a burst of energy, leaps into the air, her body twirling...
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="column px-6" style="margin: auto; width: 33%;">
+        <div class="row">
+            <div class="column" style="margin: auto;width: 100%;">
+            <p class="caption text-center">
+            <i>
+                A cyberpunk smuggler leans over a glowing console inside their hovercraft, the heads-up display scanning cargo containers filled with illicit cyberware. As the ship accelerates, the neon skyline blurs past the tinted cockpit glass, the hum of the city’s endless energy thrumming in the background.
+            </i>
+            </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+                    <!-- END OF SINGLE CONCEPT -->
+
+
+
+
+<!--                </div>-->
+                <p></p><p></p>
+
+            </div>
+        </div>
+    </div>
+
+    <hr style="max-width: 1200px;  margin: 0 auto;">
+    <div class="container" style="max-width: 1200px;">
+        <div class="row">
+            <div class="col-md-12">
+                <center><h2>Application </h2></center>
+                <h3>Longer Looping Video Generation </h3>
+                <p style="text-indent: 2em;">
+                    Our method can be easily extended to the generation of <strong>longer looping videos</strong>.
+                </p>
+                <p></p><p></p>
+                <!--                case1-->
+                <!--                case1-->
+                <!--                case1-->
+                <div class="row">
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Frames 50</strong></p>
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/long-looping/50/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Frames 100</strong></p>
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/long-looping/100/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Frames 150</strong></p>
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/long-looping/150/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 100%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p style="text-indent: 2em;">
+<!--                        <p>-->
+                        <i>
+                        A single candle flickers in the center of a dimly lit room, its flame casting soft, dancing shadows on the walls. The wax slowly melts, pooling at the base as the light flickers intermittently. The air remains still, creating a calming, rhythmic loop that feels both timeless and peaceful.
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <!--                case11-->
+                <!--                case11-->
+                <!--                case11-->
+                <div class="row">
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/long-looping/50/case_2.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/long-looping/100/case_2.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/long-looping/150/case_2.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 100%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p style="text-indent: 2em;">
+<!--                        <p>-->
+                        <i>
+                        Brilliant fireworks explode in the night sky, scattering trails of red, blue, and gold. The camera zooms in on a particularly vibrant burst, revealing intricate streaks of light before pulling back to show the whole scene. The loop continues with another explosion lighting the darkness.
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <h3>Longer Video Generation </h3>
+<!--                <p>-->
+<!--                    Since the proposed latent shifting can naturally work for longer video generation, we also compare our method for longer video generation, including <strong>Gen-L-Video</strong> achieves video smoothness by blending the overlapping regions of latents. \textit{FreeNoise} \cite{freenoise} maintains subject consistency using a shuffled sequence of latents. \textit{FIFO}~\cite{fifo} generates each frame iteratively using a queue of latents at different noise levels. \textit{DitCtrl}~\cite{ditctrl} preserves video transitions through a KV-sharing mechanism and latent mixing strategies.-->
+<!--                </p>-->
+                <p style="text-indent: 2em;">
+                    We show that our method supports <strong>longer video</strong> inference beyond the training context by a non-cycle latent displacement. We utilize the same RoPE interpolation as we introduced before to correct the position of the latent. We compare our method for longer video generation, including <strong>Gen-L-Video</strong>, <strong>FreeNoise</strong>, <strong>FIFO</strong>, <strong>DitCtrl</strong> and <strong>Naïve</strong>, which is the method of direct inference generation.
+                    The following two lines of the video case are about <strong>100</strong> frames and <strong>240</strong> frames respectively.
+                </p>
+                <p></p><p></p>
+
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 16%; text-align: center">
+                        <p><strong>Naïve</strong></p>
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/longer/single_100/naive/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 16%; text-align: center">
+                        <p><strong>Gen-L-Video</strong></p>
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/longer/single_100/gen-l-video/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 16%; text-align: center">
+                        <p><strong>FreeNoise</strong></p>
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/longer/single_100/freenoise/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 16%; text-align: center">
+                        <p><strong>FIFO</strong></p>
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/longer/single_100/fifo/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 16%; text-align: center">
+                        <p><strong>DitCtrl</strong></p>
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/longer/single_100/ditctrl/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 16%; text-align: center">
+                        <p><strong>Ours</strong></p>
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/longer/single_100/ours/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 100%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p style="text-indent: 2em;">
+<!--                        <p>-->
+                        <i>
+                        A young female activist stands tall, holding a flag high above her head with determination in her eyes. The flag flutters in the breeze, its bold colors contrasting with the backdrop of a city street or public space. Her posture is confident, embodying strength and resolve as she becomes a symbol of the cause she represents. The surrounding environment captures the energy and passion of her movement.
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 16%; text-align: center">
+<!--                        <p><strong>Naïve</strong></p>-->
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/longer/single_240/naive/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 16%; text-align: center">
+<!--                        <p><strong>Gen-L-Video</strong></p>-->
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/longer/single_240/gen-l-video/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 16%; text-align: center">
+<!--                        <p><strong>FreeNoise</strong></p>-->
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/longer/single_240/freenoise/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 16%; text-align: center">
+<!--                        <p><strong>FIFO</strong></p>-->
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/longer/single_240/fifo/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 16%; text-align: center">
+<!--                        <p><strong>DitCtrl</strong></p>-->
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/longer/single_240/ditctrl/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto;width: 16%; text-align: center">
+<!--                        <p><strong>Ours</strong></p>-->
+                        <div class="row">
+                            <div class="video-container2">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/application/longer/single_240/ours/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 100%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p style="text-indent: 2em;">
+<!--                        <p>-->
+                        <i>
+                        A seagull, its white and grey feathers ruffled by the wind, walks along the shore, its sharp beak occasionally probing the sand for food. The rhythmic sound of the ocean waves crashing against the shore fills the air, and the seagull’s feet leave soft tracks in the wet sand as it moves. In the distance, the sun sets, casting a golden glow across the water and illuminating the bird’s graceful movements. A few other seagulls are seen flying overhead, their calls adding to the peaceful coastal ambiance.
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <hr style="max-width: 1200px;  margin: 0 auto;">
+    <div class="container" style="max-width: 1200px;">
+        <div class="row">
+            <div class="col-md-12">
+                <center><h2>Ablation Studies</h2></center>
+                <p style="text-indent: 2em;"> We have given the examples to validate the effectiveness of the proposed <strong>frame-invariance latent decoding</strong>, <strong>different latent skip</strong> and <strong>the RoPE interpolation</strong>.
+                    Regarding frame-invariant latent decoding and the RoPE interpolation, note the difference between the <strong style="color: red;">first frame</strong> of the videos.
+                </p>
+                <p></p><p></p>
+
+                <p></p><p></p>
+
+                <h3>Frame-Invariance Latent Decoding</h3>
+<!--                <p style="text-indent: 2em;"> Note the difference in the <strong style="color: red;">first frame</strong> of the video.</p>-->
+                <p></p><p></p>
+                <div class="row">
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <p style="font-size: 20px; text-align: center"><strong>CogVideoX</strong></p>
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay controls  class="video">
+                                    <source src="images/ablation/frame-invariance_latent_decoding/base/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <p style="font-size: 20px; text-align: center"><strong>w/o frame-invariance latent decoding</strong></p>
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay controls  class="video">
+                                    <source src="images/ablation/frame-invariance_latent_decoding/base+LS/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Ours</strong></p>
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay controls class="video">
+                                    <source src="images/ablation/frame-invariance_latent_decoding/ours/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 100%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p style="text-indent: 2em;">
+<!--                        <p>-->
+                        <i>
+                        A woman in a flowing, white sundress and sunglasses, her hair tousled by the sea breeze, runs along a golden sandy beach as the late afternoon sun casts long shadows. The ocean's waves crash rhythmically in the background, and seagulls cry overhead. Her determined stride contrasts with the serene sunset hues painting the sky, capturing a moment of freedom and escape as the day transitions to evening. The scene embodies the perfect blend of tranquility and vitality, with the woman's silhouette framed against the fading light.
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <h3>Diffenent Latent Skip</h3>
+<!--                <p style="text-indent: 2em;"> Note the difference in the <strong style="color: red;">first frame</strong> of the video.</p>-->
+                <p></p><p></p>
+                <div class="row">
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Skip = 0</strong></p>
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay controls class="video">
+                                    <source src="images/ablation/latent_skip/skip_0/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Skip = 1</strong></p>
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay controls class="video">
+                                    <source src="images/ablation/latent_skip/skip_1/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Skip = 6</strong></p>
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay controls class="video">
+                                    <source src="images/ablation/latent_skip/skip_6/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 100%;">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p style="text-indent: 2em;">
+<!--                        <p>-->
+                        <i>
+                        A fox moves through the forest, its body sleek and agile as it glides over the ground. With each step, the watercolor brush captures the graceful movement of its paws on the soft forest floor, the colors of the trees and leaves blending in the background. The fox pauses, tilting its head to listen, before it leaps forward, its body moving fluidly through the brush, and then it darts off, its form blending with the shifting hues of the forest.
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <h3>RoPE Interpolation</h3>
+<!--                <p style="text-indent: 2em;"> Note the difference in the <strong style="color: red;">first frame</strong> of the video.</p>-->
+                <p></p><p></p>
+                <div class="row">
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <p style="font-size: 20px; text-align: center"><strong>w/o RoPE-interp.</strong></p>
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay controls class="video">
+                                    <source src="images/ablation/RoPE_interpolation/RoPE/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Shifted RoPE-interp. </strong></p>
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay controls class="video">
+                                    <source src="images/ablation/RoPE_interpolation/DyRoPE/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Fixed RoPE-interp.</strong></p>
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay controls class="video">
+                                    <source src="images/ablation/RoPE_interpolation/ExRoPE/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="column px-6" style="margin: auto;width: 100%; text-align: center">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p style="text-indent: 2em;">
+<!--                        <p>-->
+                        <i>
+                            A playful black dog, dressed in a bright orange pumpkin costume with black bat wings, stands on a patch of grass under the warm glow of autumn sunlight.  Its fluffy tail wags as it prances excitedly, the Halloween costume gently swaying with each movement.  Moments later, the dog is seen running in circles, ears flopping with joy, while a soft breeze rustles nearby fallen leaves.
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <hr style="max-width: 1200px;  margin: 0 auto;">
+    <div class="container" style="max-width: 1200px;">
+        <div class="row">
+            <div class="col-md-12">
+                <center><h2>Limitations </h2></center>
+                <p style="text-indent: 2em;"> Since our method is a training-free method based on the pre-trained video diffusion model, our motion prior might be influenced by the pre-trained video diffusion model. The generated results might not show a very smooth video in the customized domain.
+                <p></p><p></p>
+<!--                <div id="limitation" class="container" style="max-width: 1200px;">-->
+               <div class="row">
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+<!--                        <p style="font-size: 20px; text-align: center"><strong>w/o RoPE-interp.</strong></p>-->
+                        <div class="row">
+<!--                            <div class="video-container">-->
+<!--                                <video loop autoplay controls class="video">-->
+<!--                                    <source src="images/ablation/RoPE_interpolation/RoPE/case_1.mp4" type="video/mp4">-->
+<!--                                </video>-->
+<!--                                <span class="frame-number">0</span>-->
+<!--                            </div>-->
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+<!--                        <p style="font-size: 20px; text-align: center"><strong>Shifted RoPE-interp. </strong></p>-->
+                        <div class="row">
+                            <div class="video-container">
+                                <video loop autoplay muted class="video">
+                                    <source src="images/limitation/case_1.mp4" type="video/mp4">
+                                </video>
+                                <span class="frame-number">0</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    <div class="column px-6" style="margin: auto; width: 33%;">
+<!--                        <p style="font-size: 20px; text-align: center"><strong>Fixed RoPE-interp.</strong></p>-->
+                        <div class="row">
+<!--                            <div class="video-container">-->
+<!--                                <video loop autoplay controls class="video">-->
+<!--                                    <source src="images/ablation/RoPE_interpolation/ExRoPE/case_1.mp4" type="video/mp4">-->
+<!--                                </video>-->
+<!--                                <span class="frame-number">0</span>-->
+<!--                            </div>-->
+                        </div>
+                        </div>
+                </div>
+                <div class="ro">
+
+                    <div class="column px-6" style="margin: auto;width: 100%; text-align: center">
+                        <div class="row">
+                        <div class="column" style="margin: auto;width: 100%;">
+                        <p style="text-indent: 2em;">
+<!--                        <p>-->
+                        <i>
+                        A woman with a flowing scarf spins slowly in the wind, the fabric trailing behind her in an elegant swirl. Her body moves fluidly, and the soft watercolor strokes capture the motion of her dress and scarf, blending the movement into the wind that carries her. As she spins faster, the fabric billows outward, and the brushstrokes create a whirlwind effect, capturing the softness and grace of her motion.
+                        </i>
+                        </p>
+                        </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <p></p><p></p>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <hr style="max-width: 1200px;  margin: 0 auto;">
+    <div class="container" style="max-width: 1200px;">
+        <div class="row">
+            <div class="col-md-12">
+                <center><h2>Citation</h2></center>
+                <code>
+                    @article{2025mobius,<br>
+                    &nbsp; author = {Bi, Xiuli and Yuan, Jianfei and Liu, Bo and Zhang, Yong and Cun, Xiaodong and Pen, Chi-Man and Xiao, Bin},<br>
+                    &nbsp; title  = {Mobius: Text to Seamless Looping Video Generation via Latent Shift},<br>
+                    &nbsp; booktitle = {arxiv},<br>
+                    &nbsp; year   = {2025},<br>
+                }</code>
+            </div>
+        </div>
+    </div>
+
+<!--    <hr style="max-width: 1200px;">-->
+<!--    <div class="container" style="max-width: 1200px;">-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-12">-->
+<!--                <center><h2>Concurrent and Related Works</h2></center>-->
+<!--                <h5>-->
+<!--                <ul>-->
+
+<!--&lt;!&ndash;                    <li> Ta-Ying Cheng, Matheus Gadelha, Thibault Groueix, Matthew Fisher, Radomir Mech, Andrew Markham, and Niki Trigoni. <a href="https://ttchengab.github.io/continuous_3d_words">Learning Continuous 3D Words for Text-to-Image Generation.</a> CVPR 2024.</li><br>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    <li> Lukas Höllein, Aljaž Božič, Norman Müller, David Novotny, Hung-Yu Tseng, Christian Richardt, Michael Zollhöfer, and Matthias Nießner. <a href="https://lukashoel.github.io/ViewDiff/">Viewdiff: 3d-consistent image generation with text-to-image models.</a> CVPR 2024.</li><br>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    <li> James Burgess, Kuan-Chieh Wang, and Serena Yeung-Levy. <a href="https://jmhb0.github.io/view_neti/">Viewpoint Textual Inversion: Discovering Scene Representations and 3D View Control in 2D Diffusion Models.</a> ECCV 2024.</li><br>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    <li> Ziyang Yuan, Mingdeng Cao, Xintao Wang, Zhongang Qi, Chun Yuan, and Ying Shan. <a href="https://jiangyzy.github.io/CustomNet/">CustomNet: Object Customization with Variable-Viewpoints in Text-to-Image Diffusion Models.</a> ACM Multimedia 2024.</li><br>&ndash;&gt;-->
+
+<!--                </ul> -->
+<!--            </h5>               -->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <hr style="max-width: 1200px;  margin: 0 auto;">-->
+<!--    <div class="container" style="max-width: 1200px;">-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-12">-->
+<!--                <center><h2>Acknowledgements</h2></center>-->
+<!--                <p> We are thankful to-->
+<!--                </p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+
+
+
+
+    <script src="css+style/polyfill.js"></script>
+    <script src="css+style/yall.js"></script>
+    <script>
+        yall(
+            {
+                observeChanges: true
+            }
+        );
+    </script>
+    <script src="css+style/scripts.js"></script>
+    <script src="css+style/jquery.min.js"></script>
+    <script src="css+style/bootstrap.bundle.min.js"></script>
+    <script src="css+style/webflow.fd002feec.js"></script>
+
+    <!-- Import the component -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videos = document.querySelectorAll('.video');
+            const frameNumbers = document.querySelectorAll('.frame-number');
+            const targetFps = 8; // 目标帧率为8fps
+            const frameInterval = 1000 / targetFps; // 每帧的时间间隔（毫秒）
+
+            videos.forEach((video, index) => {
+                let frameCount = 0;
+                let lastFrameTime = 0;
+
+                video.addEventListener('play', function() {
+                    frameCount = 0;
+                    lastFrameTime = 0; // 重置 lastFrameTime
+                    updateFrameNumber(index, frameCount);
+                    requestAnimationFrame(updateFrame);
+                });
+                video.addEventListener('timeupdate', () => {
+                    if (video.currentTime < 0.01) { // 假设视频在0.1秒内回到开始位置
+                        frameCount = 0;
+                        updateFrameNumber(index, frameCount);
+                    }
+                });
+                // document.addEventListener('visibilitychange', () => {
+                //     if (document.visibilityState === 'visible' && !video.paused) {
+                //         video.play();
+                //     }
+                // });
+
+                function updateFrame(currentTime) {
+                    if (!video.paused && !video.ended) {
+                        if (!lastFrameTime) lastFrameTime = currentTime;
+                        const elapsedTime = currentTime - lastFrameTime;
+
+                        if (elapsedTime > frameInterval) {
+                            frameCount++;
+                            updateFrameNumber(index, frameCount);
+                            lastFrameTime = currentTime;
+                        }
+
+                        requestAnimationFrame(updateFrame);
+                    }
+                }
+
+                function updateFrameNumber(index, frameCount) {
+                    frameNumbers[index].textContent = frameCount;
+                }
+            });
+        });
+
+
+
+    </script>
+
+    <script>document.addEventListener('DOMContentLoaded', function() {
+        const toggleButton = document.getElementById('toggleAbstract');
+        const collapseContent = document.getElementById('abstractCollapse');
+
+        toggleButton.addEventListener('click', function() {
+            const expanded = toggleButton.getAttribute('aria-expanded') === 'true' || false;
+            toggleButton.setAttribute('aria-expanded', !expanded);
+            if (expanded) {
+                collapseContent.style.display = 'none';
+            } else {
+                collapseContent.style.display = 'block';
+            }
+        });
+    });
+    </script>
+
+</body></html>
