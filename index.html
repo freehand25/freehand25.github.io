@@ -23,8 +23,8 @@
 
 <!--    <link rel="manifest" href=css+style/site.webmanifest">-->
 
-    <meta name="description" content="Mobius: Text to Seamless Looping Video Generation via Latent Shift, 2025.">
-    <meta property="og:url" content="https://Mobius.github.io">
+    <meta name="description" content="Free Your Hands: Demonstration-Free Diffusion Policy Adaptation for Robotic Manipulation">
+    <meta property="og:url" content="https://hdfree2025.github.io">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Mobius: Text to Seamless Looping Video Generation via Latent Shift">
     <meta property="og:description" content="Mobius: Text to Seamless Looping Video Generation via Latent Shift, 2025.">
@@ -268,25 +268,55 @@
 
                 <h3> <strong>Transerring to Different Target Domains</strong> </h3>
                 <p></p><p></p>
-                <i>
-                    <strong>Task: Pick up the banana.</strong>
-                </i>
+
+                <h3>Task 1: Pick up the banana.</h3>
+
                 <div class="row">
                     <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
-                        <p style="font-size: 20px; text-align: center"><strong>Light</strong></p>
+                        <p style="font-size: 20px; text-align: center"><strong>Source Environment (Baseline)</strong></p>
                         <div class="video-container2.video">
                             <video loop autoplay controls muted class="video">
-                                <source src="images/videos/output.mp4" type="video/mp4">
+                                <source src="images/videos/DSC_1390.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Lighting Variation (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1391.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Lighting Variation (Ours)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1414.MP4" type="video/mp4">
                             </video>
                             <span class="frame-number">0</span>
                         </div>
                     </div>
 
                     <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
-                        <p style="font-size: 20px; text-align: center"><strong>Background</strong></p>
+                        <p style="font-size: 20px; text-align: center"><strong>Object Appearance Change (Baseline)</strong></p>
                         <div class="video-container2.video">
                             <video loop autoplay controls muted class="video">
-                                <source src="images/videos/output.mp4" type="video/mp4">
+                                <source src="images/videos/DSC_1393.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Object Appearance Change (Ours)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1404.MP4" type="video/mp4">
                             </video>
                             <span class="frame-number">0</span>
                         </div>
@@ -296,20 +326,38 @@
 
                 <div class="row">
                     <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
-                        <p style="font-size: 20px; text-align: center"><strong>Object Appearance</strong></p>
+                        <p style="font-size: 20px; text-align: center"><strong>Background Variation (Baseline)</strong></p>
                         <div class="video-container2.video">
                             <video loop autoplay controls muted class="video">
-                                <source src="images/videos/output.mp4" type="video/mp4">
+                                <source src="images/videos/DSC_1385.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Background Variation (Ours)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1388.MP4" type="video/mp4">
                             </video>
                             <span class="frame-number">0</span>
                         </div>
                     </div>
 
                     <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
-                        <p style="font-size: 20px; text-align: center"><strong>Distractors</strong></p>
+                        <p style="font-size: 20px; text-align: center"><strong>Unseen Distractors (Baseline)</strong></p>
                         <div class="video-container2.video">
                             <video loop autoplay controls muted class="video">
-                                <source src="images/videos/output.mp4" type="video/mp4">
+                                <source src="images/videos/DSC_1397.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Unseen Distractors (Ours)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1399.MP4" type="video/mp4">
                             </video>
                             <span class="frame-number">0</span>
                         </div>
@@ -317,6 +365,187 @@
                 </div>
 
                 
+                <h3>Task 2: Put the egg into the pot, then move the pot onto the stove.</h3>
+
+                <div class="row">
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Source Environment (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1352.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Lighting Variation (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1354.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Object Appearance Change (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1357.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Background Variation (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1358.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Unseen Distractors (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1360.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <h3>Task 3: Orient the cup upright on its base and insert the chili pepper vertically into it.</h3>
+
+                <div class="row">
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Source Environment (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1417.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Lighting Variation (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1419.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Object Appearance Change (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1419.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Background Variation (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1419.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Unseen Distractors (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1419.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <h3>Task 4: Use a spoon to scoop one spoonful of coffee beans from the source cup, then pour the beans into the target cup.</h3>
+
+                <div class="row">
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Source Environment (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1369.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Lighting Variation (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1371.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Object Appearance Change (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1378.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Background Variation (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1384.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+
+                    <div class="column px-6" style="flex: 0 0 45%; margin: auto; width: 50%;">
+                        <p style="font-size: 20px; text-align: center"><strong>Unseen Distractors (Baseline)</strong></p>
+                        <div class="video-container2.video">
+                            <video loop autoplay controls muted class="video">
+                                <source src="images/videos/DSC_1379.MP4" type="video/mp4">
+                            </video>
+                            <span class="frame-number">0</span>
+                        </div>
+                    </div>
+                </div>
+
+
+
 
                 <div class="row">
                     <div class="column px-6" style="margin: auto;width: 100%;">
