@@ -1,1 +1,1 @@
-# mobius-diffusion.github.io
+# freehand25.github.io
